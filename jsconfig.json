@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "@src/*": ["./src/*"],
+            "@images/*": ["./public/images/*"],
+            "@apis/*": ["./src/apis/*"],
+            "@redux/*": ["./src/redux/*"],
+            "@components/*": ["./src/components/*"],
+            "@pages/*": ["./src/pages/*"],
+        }
+    }
+}
