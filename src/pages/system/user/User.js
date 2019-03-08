@@ -258,12 +258,10 @@ class User extends React.Component {
                         </FormItem>
                     </Col>
                 </Row>
-                <div style={{ overflow: 'hidden' }}>
-                    <div style={{ marginBottom: 16 }}>
-                        <Button type="primary" onClick={this.handleSearch}>查询</Button>
-                        <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-                        <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>收起 <Icon type="up" /></a>
-                    </div>
+                <div className='submit-buttons'>
+                    <Button type="primary" onClick={this.handleSearch}>查询</Button>
+                    <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+                    <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>收起 <Icon type="up" /></a>
                 </div>
             </Form>
         );
@@ -286,9 +284,9 @@ class User extends React.Component {
                 </Breadcrumb>
                 <Card style={{ margin: '10px 20px 0' }}>
                     <div className='table-list-form'>{this.renderForm()}</div>
-                    <div className='table-list-operator'>
-                        <Button type='primary' onClick={() => { this.openUserForm() }}>新建</Button>
-                        <Button type='danger' onClick={this.showDeleteConfirm}>批量删除</Button>
+                    <div style={{ overflow: 'hidden' }}>
+                        <Button style={{ marginRight: 8,marginBottom: 16 }} type='primary' onClick={() => { this.openUserForm() }}>新建</Button>
+                        <Button style={{ marginRight: 8, marginBottom: 16 }} type='danger' onClick={this.showDeleteConfirm}>批量删除</Button>
                     </div>
                     <div className='content'>
                         <Table
