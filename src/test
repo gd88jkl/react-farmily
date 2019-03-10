@@ -1,0 +1,81 @@
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Ex = require('extract-text-webpack-plugin');
+
+
+const ROOT_PATH = path.resolve(__dirname);
+
+const SRC_PATH = path.resolve(ROOT_PATH,'src');
+const DIST_PATH = path.resolve(ROOT_PATH,'dist/client');
+const PUBLIC_PATH = path.resolve(SRC_PATH,'public');
+const HTML_TEMPLATE_PATH = path.resolve(SRC_PATH,'templates');
+const HTML_PAGE_CLIENT = path.resolve(SRC_PATH,'client');
+const HTML_BASE_PATH = path.resolve(SRC_PATH,'base');
+const PAGES = "";
+
+// 获取当前运行的模式
+var currentTarget = process.env.npm_lifecycle_event;
+var node_dir = __dirname + '/node_modules';
+
+module.exports={
+    resolve:{
+        alias:{
+            '@': SRC_PATH,
+            'assets': path.resolve(PUBLIC_PATH,'images'),
+            // 'stompjs': node_dir + '/stompjs/lib/stomp.js'
+        }
+    },
+    devtool: 'source-map',
+    node: {
+        net: 'empty'
+    },
+    entry:{
+        login:path.join(HTML_BASE_PATH,'/login/index.js'),
+        regedit:path.join(HTML_BASE_PATH,'/regedit/index.js'),
+        'cases/detail':path.join(HTML_PAGE_CLIENT,'/cases/detail/index.js'),
+        'cases/detail/enterprise':path.join(HTML_PAGE_CLIENT,'/cases/detail/customer/enterprise.js'),
+        'cases/detail/individual':path.join(HTML_PAGE_CLIENT,'/cases/detail/customer/individual.js'),
+
+
+
+        // 'more':path.join(HTML_PAGE_CLIENT,'/more/index.js'),
+        common:[
+            path.resolve(PUBLIC_PATH,'index.jsx'),
+        ]
+    },
+    output:{ 
+        path:DIST_PATH,// 输出目录
+        publicPath: '/', // 发布后，资源的引用目录
+        filename:'script/[name]/index.js',// 文件名称
+        chunkFilename: '[id].bundle.js'// 按需加载模块时输出的文件名称
+    },
+    module:{
+        rules: [
+            {test: /\.jsx?$/, use: ['babel-loader'], exclude: /node_modules/},
+            // {test: /\.css/, loader: Ex.extract({fallback: "style-loader",use: "css-loader"})},
+            {test: /\.(less|css)$/, loader: Ex.extract({fallback: "style-loader",use:[{loader: "css-loader"},{loader: "less-loader"}]})},
+            {test: /\.(ttf|eot|woff|woff2|svg)$/, loader: 'file-loader', options: {name: 'fonts/[name].[ext]'}},
+            {test: /\.(png|jpg|gif)$/,loader: 'file-loader', options: {name: 'images/[name].[ext]'}}
+        ]
+    },
+    plugins:[
+        new webpack.optimize.CommonsChunkPlugin({name:'common', filename:'script/[name]/public.js'}),
+        new HtmlWebpackPlugin({
+            template:path.resolve(HTML_TEMPLATE_PATH,'base.html'),
+            filename:path.join(PAGES,'regedit.html'),
+            chunks:['regedit','common']
+        }),
+        new HtmlWebpackPlugin({
+            template:path.resolve(HTML_TEMPLATE_PATH,'base.html'),
+            filename:path.join(PAGES,'login.html'),
+            chunks:['login','common']
+        }),
+        new Ex("css/[name]/index.css"),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        })
+    ]
+};
